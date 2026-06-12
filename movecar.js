@@ -152,7 +152,7 @@ async function handleNotify(request, url, userKey) {
     await MOVE_CAR_STATUS.put(lockKey, '1', { expirationTtl: CONFIG.RATE_LIMIT_TTL });
 
     const tasks = [];
-    // if (ppToken) tasks.push(fetch('http://www.pushplus.plus/send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: ppToken, title: "🚗 挪车请求：" + carTitle, content: notifyText.replace(/\\n/g, '<br>') + '<br><br><a href="' + confirmUrl + '" style="font-size:18px;color:#0093E9">【点击处理】</a>', template: 'html' }) }));
+    if (ppToken) tasks.push(fetch('http://www.pushplus.plus/send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: ppToken, title: "🚗 挪车请求：" + carTitle, content: notifyText.replace(/\\n/g, '<br>') + '<br><br><a href="' + confirmUrl + '" style="font-size:18px;color:#0093E9">【点击处理】</a>', template: 'html' }) }));
     if (FlareMsgToken) tasks.push(fetch('https://flaremsg.xian5.de5.net/send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: FlareMsgToken, temp: FlareMsgTempID,from: carTitle, desc: (body.message || '车旁有人等待'), remark: new Date(statusData.sentAt).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/\//g, '-'), url: confirmUrl }) }));
     if (barkUrl) tasks.push(fetch(barkUrl + "/" + encodeURIComponent('挪车请求') + "/" + encodeURIComponent(notifyText) + "?url=" + encodeURIComponent(confirmUrl)));
     if (email && resendApiKey) {
@@ -360,7 +360,7 @@ function renderMainPage(origin, userKey) {
       <p style="color:#64748b; font-size:14px; margin-top:5px">提示：车主将收到即时提醒</p>
     </div>
     <div class="card">
-      <textarea id="msgInput" placeholder="请输入留言...\n(获取定位后通知，车主回复更快哦！)"></textarea>
+      <textarea id="msgInput" placeholder="请输入留言（急事请留手机号）...\n(获取定位后通知，车主回复更快哦！)"></textarea>
       <div style="margin-top:5px">
         <div class="tag" onclick="setTag('麻烦挪下车，谢谢')">🚧 挡路了</div>
         <div class="tag" onclick="setTag('有急事外出，速来')">🏃 急事</div>
@@ -1000,7 +1000,7 @@ function renderMainPage(origin, userKey) {
       <p style="color:#64748b; font-size:14px; margin-top:5px">提示：车主将收到即时提醒</p>
     </div>
     <div class="card">
-      <textarea id="msgInput" placeholder="请输入留言...（留言后一分钟内没收到车主回信，再拨打电话提醒哦！）"></textarea>
+      <textarea id="msgInput" placeholder="请输入留言（急事请留手机号）...（留言后一分钟内没收到车主回信，再拨打电话提醒哦！）"></textarea>
       <div style="margin-top:5px">
         <div class="tag" onclick="setTag('麻烦挪下车，谢谢')">🚧 挡路了</div>
         <div class="tag" onclick="setTag('有急事外出，速来')">🏃 急事</div>
